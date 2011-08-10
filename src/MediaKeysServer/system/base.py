@@ -96,7 +96,7 @@ def mdispatch(obj, this_source, envelope):
 
 
 def process_queues(halting, src_agent, agent_name, agent_id, interest_map, responsesInterestList,
-                   iq, isq, processor, low_priority_burst_size=5):
+                   iq, isq, processor, low_priority_burst_size=5, timeout=0.1):
     """
     Runs through both queues and calls processing on valid messages
     """
@@ -104,7 +104,7 @@ def process_queues(halting, src_agent, agent_name, agent_id, interest_map, respo
     quit=False
     while True:
         try:
-            envelope=isq.get(block=True, timeout=0.1)
+            envelope=isq.get(block=True, timeout=timeout)
             quit=processor(src_agent, agent_name, agent_id, interest_map, responsesInterestList, iq, isq, envelope)
             if quit:
                 quit=True
@@ -267,6 +267,11 @@ class AgentThreadedBase(Thread):
     def doQuit(self):
         self.quit=True
         
+    def onLoop(self):
+        """ Called during each loop iteration
+        """
+        pass
+        
     def run(self):
         """
         Main Loop
@@ -277,7 +282,7 @@ class AgentThreadedBase(Thread):
         ## it will signal which 'message types' are of interest.
         mswitch.subscribe(self.id, self.iq, self.isq)
         
-        getattr(self, "beforeRun")()
+        self.beforeRun()
         
         print "Agent(%s) (%s) starting" % (self.agent_name, self.id)
         self._pub("__agent__", self.agent_name, self.id, "started")
@@ -287,6 +292,8 @@ class AgentThreadedBase(Thread):
             quit=process_queues(self.halting, self, self.agent_name, self.id, 
                                 self.mmap, self.responsesInterest,
                                 self.iq, self.isq, message_processor)
+            if not quit:
+                self.onLoop()
         
         self.beforeQuit()
         

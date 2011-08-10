@@ -118,12 +118,12 @@ class WebSocketServer(object):
         self.connections = {}
         self.listeners = [self.socket]
 
-    def listen(self, backlog=5):
+    def listen(self, backlog=5, timeout=1):
         self.socket.listen(backlog)
         logging.info("Listening on %s" % self.port)
         self.running = True
         while self.running:
-            rList, _wList, xList = select(self.listeners, [], self.listeners, 1)
+            rList, _wList, xList = select(self.listeners, [], self.listeners, timeout)
             for ready in rList:
                 if ready == self.socket:
                     logging.debug("New client connection")
