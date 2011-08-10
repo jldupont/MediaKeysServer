@@ -14,7 +14,7 @@ class SocketServerAgent(AgentThreadedBase):
         self.server= WebSocketServer("localhost", 1337, WebSocket)
         
     def onLoop(self):
-        self.server.listen(backlog=5, timeout=1)
+        self.server.listen(timeout=1)
 
 
 _=SocketServerAgent()

@@ -108,7 +108,7 @@ class WebSocket(object):
         self.client.close()
 
 class WebSocketServer(object):
-    def __init__(self, bind, port, cls):
+    def __init__(self, bind, port, cls, backlog=5):
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         self.socket.bind((bind, port))
@@ -117,39 +117,39 @@ class WebSocketServer(object):
         self.cls = cls
         self.connections = {}
         self.listeners = [self.socket]
-
-    def listen(self, backlog=5, timeout=1):
         self.socket.listen(backlog)
-        logging.info("Listening on %s" % self.port)
-        self.running = True
-        while self.running:
-            rList, _wList, xList = select(self.listeners, [], self.listeners, timeout)
-            for ready in rList:
-                if ready == self.socket:
-                    logging.debug("New client connection")
-                    client, _address = self.socket.accept()
-                    fileno = client.fileno()
-                    self.listeners.append(fileno)
-                    self.connections[fileno] = self.cls(client, self)
+        
+    def listen(self, timeout=1):
+
+        #logging.info("Listening on %s" % self.port)
+
+        rList, _wList, xList = select(self.listeners, [], self.listeners, timeout)
+        for ready in rList:
+            if ready == self.socket:
+                logging.debug("New client connection")
+                client, _address = self.socket.accept()
+                fileno = client.fileno()
+                self.listeners.append(fileno)
+                self.connections[fileno] = self.cls(client, self)
+            else:
+                logging.debug("Client ready for reading %s" % ready)
+                logging.debug("Connections %s" % `self.connections`)
+                client = self.connections[ready].client
+                data = client.recv(1024)
+                fileno = client.fileno()
+                if data:
+                    self.connections[fileno].feed(data)
                 else:
-                    logging.debug("Client ready for reading %s" % ready)
-                    logging.debug("Connections %s" % `self.connections`)
-                    client = self.connections[ready].client
-                    data = client.recv(1024)
-                    fileno = client.fileno()
-                    if data:
-                        self.connections[fileno].feed(data)
-                    else:
-                        logging.debug("Closing client %s" % ready)
-                        self.connections[fileno].close()
-                        del self.connections[fileno]
-                        self.listeners.remove(ready)
-            for failed in xList:
-                if failed == self.socket:
-                    logging.error("Socket broke")
-                    for fileno, conn in self.connections:
-                        conn.close()
-                    self.running = False
+                    logging.debug("Closing client %s" % ready)
+                    self.connections[fileno].close()
+                    del self.connections[fileno]
+                    self.listeners.remove(ready)
+        for failed in xList:
+            if failed == self.socket:
+                logging.error("Socket broke")
+                for fileno, conn in self.connections:
+                    conn.close()
+
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.DEBUG, format="%(asctime)s - %(levelname)s - %(message)s")
