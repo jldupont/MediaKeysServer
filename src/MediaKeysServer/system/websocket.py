@@ -149,6 +149,10 @@ class WebSocketServer(object):
                 logging.error("Socket broke")
                 for fileno, conn in self.connections:
                     conn.close()
+                    
+    def send(self, msg):
+        for socket in self.connections.values():
+            socket.send(msg)
 
 
 if __name__ == "__main__":
