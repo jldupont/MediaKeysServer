@@ -21,7 +21,7 @@ try:
 except:
     pass
 
-from ...system.base import AgentThreadedBase
+from ..system.base import AgentThreadedBase
 
 __all__=["NotifierAgent", "notify"]
 
