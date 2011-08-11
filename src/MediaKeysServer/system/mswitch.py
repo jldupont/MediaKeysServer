@@ -142,7 +142,8 @@ class CentralSwitch(Thread):
         """
         #print "do_pub: mtype: %s  payload: %s" % (mtype, payload)
         if debugging_mode:
-            print "%s: %s (%s)" % (orig, mtype, payload)
+            if mtype not in OBSERVE_FILTER_OUT:
+                print "%s: %s (%s)" % (orig, mtype, payload)
                             
         for sorig, q, sq in self.clients:
             
