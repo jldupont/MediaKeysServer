@@ -56,8 +56,9 @@ def main(debug=False):
         sys.exit(1)        
         
     except Exception,e:
-        try: notify(APP_NAME, "There was an error: %s" % e)
-        except:
+        try: 
+            notify(APP_NAME, "There was an error: %s" % e)
+        finally:
             print "Exception: %s" % e
         mswitch.quit()
         sys.exit(1)
