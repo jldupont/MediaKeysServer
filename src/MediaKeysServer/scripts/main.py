@@ -49,7 +49,7 @@ def main(debug=False):
         mswitch.publish("__main__", "debug", debug)
         
         import gtk
-        gtk.main()
+        gtk.main() #@UndefinedVariable
         
     except KeyboardInterrupt:
         mswitch.quit()
