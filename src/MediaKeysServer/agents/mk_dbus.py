@@ -10,8 +10,8 @@
 """
 import dbus.service
     
-from MediaKeysServer.system.base import AgentThreadedBase
-from MediaKeysServer.system import mswitch
+from ..system.base import AgentThreadedBase
+from ..system import mswitch
 
 __all__=[]
 
