@@ -32,9 +32,8 @@ def main(debug=False):
     try:
         
         from   MediaKeysServer.res import get_res_path
-        from   MediaKeysServer.agents.squeeze_tray import TrayAgent
+        from   MediaKeysServer.agents.tray import TrayAgent
         import MediaKeysServer.agents.mk_dbus #@UnusedImport
-        import MediaKeysServer.agents.squeeze #@UnusedImport
         from   MediaKeysServer.agents.clock import Clock #@Reimport        
         from   MediaKeysServer.agents.notifier import notify, NotifierAgent #@Reimport
                 
