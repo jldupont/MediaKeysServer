@@ -15,6 +15,13 @@ from ..system import mswitch
 
 __all__=[]
 
+TranslationMap={
+                 "next-song":     "next"
+                ,"previous-song": "previous"
+                ,"play":          "play-pause"
+                ,"stop-cd":       "stop"
+                }
+
 
 class MKSignalRx1(dbus.service.Object):
     """ works under ubuntu < 10.10
@@ -37,7 +44,12 @@ class MKSignalRx1(dbus.service.Object):
         """
         if len(p) == 2:
             if (p[0]=="ButtonPressed"):
-                mswitch.publish(self.agent, "mk_key_press", p[1], "source1", 5)
+                self._send(p[1].lower())
+                #mswitch.publish(self.agent, "mk_key_press", p[1], "source1", 5)
+                
+    def _send(self, key):
+        tkey=TranslationMap.get(key, key)
+        mswitch.publish(self.agent, "mk_key_press", tkey, "source1", 5)
 
 class MKSignalRx2(dbus.service.Object):
     """ works on ubuntu >= 10.10
@@ -59,8 +71,12 @@ class MKSignalRx2(dbus.service.Object):
         DBus signal handler
         """
         if len(p) == 2:
-            mswitch.publish(self.agent, "mk_key_press", p[1].lower(), "source2", 1)
+            #mswitch.publish(self.agent, "mk_key_press", p[1].lower(), "source2", 1)
+            self._send(p[1].lower())
 
+    def _send(self, key):
+        tkey=TranslationMap.get(key, key)
+        mswitch.publish(self.agent, "mk_key_press", tkey, "source1", 5)
 
 
 class DbusAgent(AgentThreadedBase):
