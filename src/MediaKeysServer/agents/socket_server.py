@@ -3,8 +3,8 @@ Created on Aug 10, 2011
 
 @author: jldupont
 '''
-from MediaKeysServer.system.base import AgentThreadedBase
-from MediaKeysServer.system.websocket import WebSocketServer, WebSocket
+from ..system.base import AgentThreadedBase
+from ..system.websocket import WebSocketServer, WebSocket
 
 class SocketServerAgent(AgentThreadedBase):
     
