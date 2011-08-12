@@ -70,7 +70,10 @@ def create():
     
 def run(app, time_base, clock_class, ui_class):
     clock_obj=clock_class(time_base)
+    
+    print "before create ui"
     ui_obj=ui_class()
+    print "after create ui"
     
     ticker=Ticker.alloc().init()
     ticker.setup(time_base, clock_obj, ui_obj)
