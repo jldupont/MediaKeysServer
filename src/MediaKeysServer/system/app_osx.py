@@ -48,6 +48,9 @@ class App(NSApplication, BaseApp): #@UndefinedVariable
 
 class Ticker(NSObject): #@UndefinedVariable
     
+    def __init__(self):
+        NSObject.__init__(self) #@UndefinedVariable
+    
     def setup(self, time_base, clock_obj, ui_obj):
         print "ui_obj: %s" % ui_obj
         self.clock_obj=clock_obj
