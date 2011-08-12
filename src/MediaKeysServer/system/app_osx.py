@@ -39,7 +39,7 @@ class App(NSApplication, BaseApp): #@UndefinedVariable
         
         self.statusitem.setMenu_(menu)
 
-    def show(self, *p):
+    def show(self):
         mswitch.publish(self, "app_show")
 
     def help(self):
