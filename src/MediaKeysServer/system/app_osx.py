@@ -13,7 +13,7 @@ from PyObjCTools import AppHelper  #@UnresolvedImport
 from app import BaseApp
 from ..system import mswitch as mswitch
 
-class KeySocketApp(NSApplication, BaseApp): #@UndefinedVariable
+class App(NSApplication, BaseApp): #@UndefinedVariable
 
     def finishLaunching(self):
         statusbar = NSStatusBar.systemStatusBar()
@@ -42,12 +42,12 @@ class KeySocketApp(NSApplication, BaseApp): #@UndefinedVariable
     def show(self, *p):
         mswitch.publish(self, "app_show")
 
-    def help(self, *_):
+    def help(self):
         webbrowser.open(self.help_url)
 
 
 def create():
-    app = KeySocketApp.sharedApplication()
+    app = App.sharedApplication()
     return app
     
 def run(app):
