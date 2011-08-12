@@ -39,7 +39,7 @@ def main(debug=False):
         #from   MediaKeysServer.agents.clock import Clock #@Reimport        
         #from   MediaKeysServer.agents.notifier import NotifierAgent #@Reimport
                 
-        icon_path=get_res_path()
+        icon_path=get_res_path(ICON_NAME)
         from MediaKeysServer.system import app as App
         
         _app=App.create()
