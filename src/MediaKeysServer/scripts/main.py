@@ -37,7 +37,7 @@ def main(debug=False):
         if util.isLinux():
             import MediaKeysServer.agents.mk_dbus #@UnusedImport
         #from   MediaKeysServer.agents.clock import Clock #@Reimport        
-        from   MediaKeysServer.agents.notifier import NotifierAgent #@Reimport
+        #from   MediaKeysServer.agents.notifier import NotifierAgent #@Reimport
                 
         icon_path=get_res_path()
         from MediaKeysServer.system import app as App
@@ -48,8 +48,8 @@ def main(debug=False):
         _app.help_url=HELP_URL
         _app.icon_path=icon_path
         
-        _na=NotifierAgent(APP_NAME, ICON_NAME)
-        _na.start()
+        #_na=NotifierAgent(APP_NAME, ICON_NAME)
+        #_na.start()
 
         #_clk=Clock(TIME_BASE)
         #_clk.init()
