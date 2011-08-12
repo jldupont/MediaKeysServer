@@ -55,5 +55,5 @@ def create():
     
 def run(app):
     ticker=Ticker()
-    NSTimer.timerWithTimeInterval_target_selector_userInfo_repeats(0.1, ticker, 'tick', None, False) #@UndefinedVariable
+    NSTimer.scheduledTimerWithTimeInterval_target_selector_userInfo_repeats(0.1, ticker, 'tick', None, False) #@UndefinedVariable
     AppHelper.runEventLoop(installInterrupt=True)
