@@ -30,10 +30,12 @@ mswitch.debugging_mode=MSWITCH_DEBUGGING_MODE
 
 def main(debug=False):
     try:
+        import MediaKeysServer.system.util as util
         
         from   MediaKeysServer.res import get_res_path
-        from   MediaKeysServer.agents.tray import TrayAgent
-        import MediaKeysServer.agents.mk_dbus #@UnusedImport
+        
+        if util.isLinux():
+            import MediaKeysServer.agents.mk_dbus #@UnusedImport
         from   MediaKeysServer.agents.clock import Clock #@Reimport        
         from   MediaKeysServer.agents.notifier import notify, NotifierAgent #@Reimport
                 
