@@ -13,6 +13,7 @@ class UiAgent(AgentPumped):
     def __init__(self, debug=False):
         AgentPumped.__init__(self, debug)
         
+        print "uiagent.__init__: start"
         self.root=Tkinter.Tk()
         self.frame=Tkinter.Frame(self.root)
         self.frame.pack()
@@ -20,6 +21,7 @@ class UiAgent(AgentPumped):
         #self.button_quit.pack(side=Tkinter.LEFT)
         
         self.root.protocol("WM_DELETE_WINDOW", self.hide_window)
+        print "uiagent.__init__: end"
         
     def hide_window(self):
         self.root.withdraw()
