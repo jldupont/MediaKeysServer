@@ -40,6 +40,18 @@ class App(NSApplication, BaseApp): #@UndefinedVariable
         
         self.statusitem.setMenu_(menu)
 
+    def sendEvent(self, event):
+        if event.type() is NSSystemDefined and event.subtype() is 8:
+                    data = event.data1()
+                    keyCode = (data & 0xFFFF0000) >> 16
+                    keyFlags = (data & 0x0000FFFF)
+                    keyState = (keyFlags & 0xFF00) >> 8
+                    keyRepeat = keyFlags & 0x1
+        
+                    print "keycode(%s) keystate(%s)" % (keyCode, keyState)
+        
+        NSApplication.sendEvent_(self, event)        
+
     def show(self):
         mswitch.publish(self, "app_show")
 

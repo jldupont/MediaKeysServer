@@ -1,7 +1,8 @@
 '''
-Created on 2011-08-12
+    Issue on osx...
 
-@author: jldupont
+    Created on 2011-08-12
+    @author: jldupont
 '''
 import Tkinter
 
@@ -13,7 +14,6 @@ class UiAgent(AgentPumped):
     def __init__(self, debug=False):
         AgentPumped.__init__(self, debug)
         
-        print "uiagent.__init__: start"
         self.root=Tkinter.Tk()
         self.frame=Tkinter.Frame(self.root)
         self.frame.pack()
