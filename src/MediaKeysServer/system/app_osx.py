@@ -72,7 +72,7 @@ class App(NSApplication, BaseApp): #@UndefinedVariable
                     if keyState==11: #depressed
                         tkey=TranslationMap.get(keyCode, None)
                         if tkey is not None:
-                            print "keycode(%s) keystate(%s)" % (keyCode, keyState)
+                            print "keycode(%s) keystate(%s): %s" % (keyCode, keyState, tkey)
         
         NSApplication.sendEvent_(self, event)        
 
