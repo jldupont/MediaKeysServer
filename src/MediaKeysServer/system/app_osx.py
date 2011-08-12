@@ -6,6 +6,8 @@ Created on 2011-08-11
 http://pyobjc.sourceforge.net/
 '''
 import webbrowser
+
+#import pyobjc #@UnresolvedImport
 from Foundation import *
 from AppKit import *
 from PyObjCTools import AppHelper  #@UnresolvedImport
@@ -44,8 +46,10 @@ class App(NSApplication, BaseApp): #@UndefinedVariable
     def help(self):
         webbrowser.open(self.help_url)
 
-class Ticker(object):
-    def tick(self, timer):
+class Ticker(NSObject):
+    
+    @objc.signature("v@:f")
+    def tick_(self, timer):
         print "tick: %s" % timer
         
 
