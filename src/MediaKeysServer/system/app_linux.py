@@ -3,7 +3,7 @@ Created on 2011-08-11
 
 @author: jldupont
 '''
-import os
+import gobject #@UnresolvedImport
 import gtk #@UnusedImport
 import gtk.gdk
 import webbrowser
@@ -85,8 +85,10 @@ class TrayApp(BaseApp):
 def create():
     return TrayApp()
 
-def run(app):
+def run(app, time_base, clock_class):
     app.prepare()
+    clock_obj=clock_class(time_base)
+    gobject.timeout_add(time_base, clock_obj.tick)
     gtk.main() #@UndefinedVariable
     
 

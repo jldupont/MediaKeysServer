@@ -5,7 +5,7 @@
 
     @author: jldupont
 '''
-import gobject
+#import gobject
 from Queue import Queue
 from ..system import mswitch
 from ..system.base import process_queues, message_processor
@@ -37,8 +37,8 @@ class Clock(object):
         self.interests={}
         self.responsesInterests=[]
 
-    def init(self):
-        gobject.timeout_add(self.time_base, self.tick)
+    #def init(self):
+    #    gobject.timeout_add(self.time_base, self.tick)
 
     def pub(self, msgType, *pargs, **kargs):
         mswitch.publish("__main__", msgType, *pargs, **kargs)

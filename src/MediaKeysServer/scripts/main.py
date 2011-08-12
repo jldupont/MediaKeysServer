@@ -36,7 +36,7 @@ def main(debug=False):
         
         if util.isLinux():
             import MediaKeysServer.agents.mk_dbus #@UnusedImport
-        #from   MediaKeysServer.agents.clock import Clock #@Reimport        
+        from   MediaKeysServer.agents.clock import Clock #@Reimport        
         #from   MediaKeysServer.agents.notifier import NotifierAgent #@Reimport
                 
         icon_path=get_res_path(ICON_NAME)
@@ -56,7 +56,7 @@ def main(debug=False):
         
         mswitch.publish("__main__", "debug", debug)
         
-        App.run(_app)
+        App.run(_app, TIME_BASE, Clock)
         #import gtk
         #gtk.main() #@UndefinedVariable
         
