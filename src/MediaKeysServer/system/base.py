@@ -227,6 +227,7 @@ class AgentBase(object):
         
     def doQuit(self):
         self.quit=True
+        self.pub("__quit__")
         
     def onLoop(self):
         """ Called during each loop iteration
@@ -262,6 +263,8 @@ class AgentPumped(AgentBase):
         if self.quit:        
             self.beforeQuit()
             print "Agent(%s) (%s) ending" % (self.agent_name, self.id)
+            
+        return self.quit
         
 
 

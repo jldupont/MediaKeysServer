@@ -91,6 +91,7 @@ def run(app, time_base, clock_class, ui_class):
     clock_obj=clock_class(time_base)
     
     def doTick():
+        #print "doTick!"
         clock_obj.tick()
         ui_obj.tick()
         return True

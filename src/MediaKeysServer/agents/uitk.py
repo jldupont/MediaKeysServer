@@ -16,16 +16,19 @@ class UiAgent(AgentPumped):
         self.root=Tkinter.Tk()
         self.frame=Tkinter.Frame(self.root)
         self.frame.pack()
-        self.button_quit=Tkinter.Button(self.frame, text="Quit", command=self.announceQuit)
-        self.button_quit.pack(side=Tkinter.LEFT)
+        #self.button_quit=Tkinter.Button(self.frame, text="Quit", command=self.announceQuit)
+        #self.button_quit.pack(side=Tkinter.LEFT)
         
-        self.root.protocol("WM_DELETE_WINDOW", self.delete_window)
+        self.root.protocol("WM_DELETE_WINDOW", self.hide_window)
         
-    def delete_window(self):
+    def hide_window(self):
         self.root.withdraw()
-        
-    def announceQuit(self):
-        self.pub("__quit__")
+
+    def h_app_show(self):
+        self.root.deiconify() 
+        self.root.lift()
+    
+    ## AGENT api ====================================================    
         
     def beforeQuit(self):
         try:
@@ -35,11 +38,13 @@ class UiAgent(AgentPumped):
         print "uitk.doQuit"
         
     def tick(self):
-        self.doPump()
+        if self.doPump():
+            try: self.root.destroy()
+            except: pass
         
     def onLoop(self, *p):
         try:
             self.root.update()
-        except:
-            pass
+        except Exception, e:
+            print "onLoop update error: %s" % e
 

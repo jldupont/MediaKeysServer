@@ -9,7 +9,7 @@ APP_VERSION="0.1"
 APP_NAME="MediaKeysServer"
 ICON_NAME="mediakeysserver.png"
 HELP_URL="http://www.systemical.com/doc/opensource/mediakeysserver"
-TIME_BASE=100
+TIME_BASE=500
 
 ###<<< DEVELOPMENT MODE SWITCHES
 MSWITCH_OBSERVE_MODE=True
