@@ -66,5 +66,5 @@ def run(app, time_base, clock_class):
     clock_obj=clock_class(time_base)
     ticker=Ticker.alloc().init()
     ticker.setup(time_base, clock_obj)
-    NSTimer.scheduledTimerWithTimeInterval_target_selector_userInfo_repeats_(1000/time_base, ticker, 'tick:', None, True) #@UndefinedVariable
+    NSTimer.scheduledTimerWithTimeInterval_target_selector_userInfo_repeats_(time_base/1000, ticker, 'tick:', None, True) #@UndefinedVariable
     AppHelper.runEventLoop(installInterrupt=True)
