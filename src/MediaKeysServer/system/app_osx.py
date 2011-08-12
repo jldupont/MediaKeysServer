@@ -52,7 +52,6 @@ class Ticker(NSObject): #@UndefinedVariable
         NSObject.__init__(self) #@UndefinedVariable
     
     def dosetup(self, time_base, clock_obj, ui_obj):
-        print "ui_obj: %s" % ui_obj
         self.clock_obj=clock_obj
         self.ui_obj=ui_obj
         self.time_base=time_base
