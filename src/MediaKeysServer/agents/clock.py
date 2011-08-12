@@ -22,11 +22,11 @@ class Clock(object):
         @param time_base: in milliseconds
         """
         self.time_base=time_base 
-        self.ticks_second=time_base/1000
+        self.ticks_second=1000/time_base
 
         self.iq=Queue()
         self.isq=Queue()
-        mswitch.subscribe("__main__", self.iq, self.isq)
+        mswitch.subscribe("Clock", self.iq, self.isq)
 
         self.tick_count=1
         self.sec_count=0
@@ -41,7 +41,7 @@ class Clock(object):
     #    gobject.timeout_add(self.time_base, self.tick)
 
     def pub(self, msgType, *pargs, **kargs):
-        mswitch.publish("__main__", msgType, *pargs, **kargs)
+        mswitch.publish("Clock", msgType, *pargs, **kargs)
         
     def tick(self, *_):
         """
@@ -68,18 +68,22 @@ class Clock(object):
                     if tick_day:
                         self.day_count += 1
         
-        print "tick! ", tick_second
-        mswitch.publish("__main__", "__tick__", self.ticks_second, 
+        #print "tick! ", tick_second
+        mswitch.publish("Clock", "__tick__", self.ticks_second, 
                         tick_second, tick_min, tick_hour, tick_day, 
                         self.sec_count, self.min_count, self.hour_count, self.day_count)
         
         #(src_agent, agent_name, agent_id, 
         #  interest_map, responsesInterestList, 
         #  iq, isq, processor, low_priority_burst_size=5)
-        quit=process_queues(False, self, "__main__", "__main__", 
-                       self.interests, self.responsesInterests,
-                       self.iq, self.isq, message_processor 
-                       )
+        try:
+            quit=process_queues(False, self, "Clock", "Clock", 
+                           self.interests, self.responsesInterests,
+                           self.iq, self.isq, message_processor 
+                           )
+        except:
+            pass
+        
         ## for gobject... just in case
         return True
 

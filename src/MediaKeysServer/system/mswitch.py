@@ -17,6 +17,7 @@ from Queue import Queue, Empty
 
 __all__=["publish", "subscribe", "quit", "observe_mode"]
 OBSERVE_FILTER_OUT=["__tick__", "log", "llog"]
+#OBSERVE_FILTER_OUT=[ "log", "llog"]
 OBSERVE_FILTER_OUT_SOURCES=["__bridge__",]
 #OSBSERVE_FILTER_OUT=["log", "llog"]
             

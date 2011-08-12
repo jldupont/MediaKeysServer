@@ -24,22 +24,18 @@ class UiAgent(AgentPumped):
         self.pub("__quit__")
         
     def beforeQuit(self):
-        self.root.destroy()
+        try:
+            self.root.destroy()
+        except:
+            pass
         print "uitk.doQuit"
         
-    def h__tick__(self, *p):
-        print "uitk.__tick__"
-        self.root.update()
-
-    def onLoop(self):
-        print "onLoop"
-        pass
-
-    def start(self):
-        pass
+    def tick(self):
+        self.doPump()
         
-    
-    
-_=UiAgent()
-_.start()
+    def onLoop(self, *p):
+        try:
+            self.root.update()
+        except:
+            pass
 

@@ -29,5 +29,5 @@ else:
 def create():
     return osapp.create()
 
-def run(app, time_base, clock_class):
-    osapp.run(app, time_base, clock_class)
+def run(app, time_base, clock_class, ui_class):
+    osapp.run(app, time_base, clock_class, ui_class)

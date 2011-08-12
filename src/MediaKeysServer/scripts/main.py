@@ -9,7 +9,7 @@ APP_VERSION="0.1"
 APP_NAME="MediaKeysServer"
 ICON_NAME="mediakeysserver.png"
 HELP_URL="http://www.systemical.com/doc/opensource/mediakeysserver"
-TIME_BASE=1000
+TIME_BASE=100
 
 ###<<< DEVELOPMENT MODE SWITCHES
 MSWITCH_OBSERVE_MODE=True
@@ -41,7 +41,7 @@ def main(debug=False):
             _na=NotifierAgent(APP_NAME, ICON_NAME)
             _na.start()
             
-        #import MediaKeysServer.agents.uitk #@UnusedImport
+        from MediaKeysServer.agents.uitk import UiAgent
                    
         icon_path=get_res_path(ICON_NAME)
         
@@ -53,7 +53,7 @@ def main(debug=False):
         
         mswitch.publish("__main__", "debug", debug)
                 
-        App.run(_app, TIME_BASE, Clock)
+        App.run(_app, TIME_BASE, Clock, UiAgent)
         
     except KeyboardInterrupt:
         mswitch.quit()

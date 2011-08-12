@@ -81,14 +81,21 @@ class TrayApp(BaseApp):
     def help(self, *_):
         webbrowser.open(self.help_url)
 
-
 def create():
     return TrayApp()
 
-def run(app, time_base, clock_class):
+def run(app, time_base, clock_class, ui_class):
+    
     app.prepare()
+    ui_obj=ui_class()
     clock_obj=clock_class(time_base)
-    gobject.timeout_add(time_base, clock_obj.tick)
+    
+    def doTick():
+        clock_obj.tick()
+        ui_obj.tick()
+        return True
+
+    gobject.timeout_add(time_base, doTick)
     gtk.main() #@UndefinedVariable
     
 
