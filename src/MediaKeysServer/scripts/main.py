@@ -31,16 +31,18 @@ mswitch.debugging_mode=MSWITCH_DEBUGGING_MODE
 def main(debug=False):
     try:
         import MediaKeysServer.system.util as util
-        
+        from   MediaKeysServer.agents.clock import Clock
         from   MediaKeysServer.res import get_res_path
-        
+        from   MediaKeysServer.system import app as App
+                
         if util.isLinux():
             import MediaKeysServer.agents.mk_dbus #@UnusedImport
-        from   MediaKeysServer.agents.clock import Clock #@Reimport        
-        #from   MediaKeysServer.agents.notifier import NotifierAgent #@Reimport
-                
+            from MediaKeysServer.agents.notifier import NotifierAgent
+            _na=NotifierAgent(APP_NAME, ICON_NAME)
+            _na.start()
+            
+                   
         icon_path=get_res_path(ICON_NAME)
-        from MediaKeysServer.system import app as App
         
         _app=App.create()
         _app.app_name=APP_NAME
@@ -48,17 +50,9 @@ def main(debug=False):
         _app.help_url=HELP_URL
         _app.icon_path=icon_path
         
-        #_na=NotifierAgent(APP_NAME, ICON_NAME)
-        #_na.start()
-
-        #_clk=Clock(TIME_BASE)
-        #_clk.init()
-        
         mswitch.publish("__main__", "debug", debug)
-        
+                
         App.run(_app, TIME_BASE, Clock)
-        #import gtk
-        #gtk.main() #@UndefinedVariable
         
     except KeyboardInterrupt:
         mswitch.quit()
