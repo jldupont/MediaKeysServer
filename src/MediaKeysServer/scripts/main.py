@@ -37,7 +37,7 @@ def main(debug=False):
         if util.isLinux():
             import MediaKeysServer.agents.mk_dbus #@UnusedImport
         from   MediaKeysServer.agents.clock import Clock #@Reimport        
-        from   MediaKeysServer.agents.notifier import notify, NotifierAgent #@Reimport
+        from   MediaKeysServer.agents.notifier import NotifierAgent #@Reimport
                 
         icon_path=get_res_path()
         from MediaKeysServer.system import app as App
@@ -66,7 +66,7 @@ def main(debug=False):
         
     except Exception,e:
         try: 
-            notify(APP_NAME, "There was an error: %s" % e)
+            util.notify(APP_NAME, "There was an error: %s" % e)
         finally:
             print "Exception: %s" % e
         mswitch.quit()

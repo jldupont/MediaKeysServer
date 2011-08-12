@@ -17,24 +17,13 @@
     Created on Jun 28, 2010
 """
 try:
-    import pynotify
+    import pynotify #@UnresolvedImport
 except:
     pass
 
 from ..system.base import AgentThreadedBase
 
-__all__=["NotifierAgent", "notify"]
-
-
-def notify(app_name, msg, icon_name="important", urgency=pynotify.URGENCY_CRITICAL):
-    try:
-        pynotify.init(app_name)
-        n=pynotify.Notification(app_name, msg, icon_name)
-        n.set_urgency(urgency)
-        n.show()
-        return n
-    except:
-        print "%s: %s" % (app_name, msg)
+__all__=["NotifierAgent"]
 
 
 class NotifierAgent(AgentThreadedBase):
@@ -75,7 +64,4 @@ class NotifierAgent(AgentThreadedBase):
 _=NotifierAgent(APP_NAME, ICON_NAME)
 _.start()
 """        
-
-if __name__=="__main__":
-    notify("test", "test message!")
     
