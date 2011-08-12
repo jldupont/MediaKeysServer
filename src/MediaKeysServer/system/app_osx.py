@@ -18,25 +18,22 @@ class App(NSApplication, BaseApp): #@UndefinedVariable
     def finishLaunching(self):
         print self.icon_path
         
-        statusbar = NSStatusBar.systemStatusBar()
-        self.statusitem = statusbar.statusItemWithLength_(NSSquareStatusItemLength)
+        statusbar = NSStatusBar.systemStatusBar() #@UndefinedVariable
+        self.statusitem = statusbar.statusItemWithLength_(NSSquareStatusItemLength) #@UndefinedVariable
 
-        self.icon = NSImage.alloc().initByReferencingFile_(self.icon_path)
+        self.icon = NSImage.alloc().initByReferencingFile_(self.icon_path) #@UndefinedVariable
         self.icon.setSize_((20, 20))
         self.statusitem.setImage_(self.icon)
 
-        menu = NSMenu.alloc().init()
+        menu = NSMenu.alloc().init() #@UndefinedVariable
         
-        menuitem = NSMenuItem.alloc().initWithTitle_action_keyEquivalent_(
-            'exit', 'terminate:', '')
+        menuitem = NSMenuItem.alloc().initWithTitle_action_keyEquivalent_('exit', 'terminate:', '')  #@UndefinedVariable
         menu.addItem_(menuitem)
 
-        menuitem = NSMenuItem.alloc().initWithTitle_action_keyEquivalent_(
-            'show', 'show', '')
+        menuitem = NSMenuItem.alloc().initWithTitle_action_keyEquivalent_('show', 'show', '') #@UndefinedVariable
         menu.addItem_(menuitem)
 
-        menuitem = NSMenuItem.alloc().initWithTitle_action_keyEquivalent_(
-            'help', 'help', '')
+        menuitem = NSMenuItem.alloc().initWithTitle_action_keyEquivalent_('help', 'help', '') #@UndefinedVariable
         menu.addItem_(menuitem)
         
         self.statusitem.setMenu_(menu)

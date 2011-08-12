@@ -12,7 +12,7 @@ from ..system import mswitch as mswitch
 from app import BaseApp
 
 class AppPopupMenu:
-    def __init__(self, app, version, menu_items):
+    def __init__(self, app, version):
         if version is not None:
             self.item_version = gtk.MenuItem( "version: %s" % version, False) #@UndefinedVariable
             self.item_version.set_sensitive(False)
@@ -48,12 +48,12 @@ class AppIcon(object):
 
 
 
-class TrayApp(object, BaseApp):
+class TrayApp(BaseApp):
     def __init__(self):
         pass
     
     def prepare(self):
-        self.popup_menu=AppPopupMenu(self, self.version, self.menu_items)
+        self.popup_menu=AppPopupMenu(self, self.version)
         
         self.tray=gtk.StatusIcon() #@UndefinedVariable
         self.tray.set_visible(True)
@@ -87,6 +87,6 @@ def create():
 
 def run(app):
     app.prepare()
-    gtk.main()
+    gtk.main() #@UndefinedVariable
     
 
