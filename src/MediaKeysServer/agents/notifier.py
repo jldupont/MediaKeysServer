@@ -16,15 +16,14 @@
     @author: jldupont
     Created on Jun 28, 2010
 """
+__all__=["NotifierAgent"]
+
 try:
     import pynotify #@UnresolvedImport
 except:
     pass
 
 from ..system.base import AgentThreadedBase
-
-__all__=["NotifierAgent"]
-
 
 class NotifierAgent(AgentThreadedBase):
     

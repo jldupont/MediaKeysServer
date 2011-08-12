@@ -172,32 +172,22 @@ def message_processor(src_agent, agent_name, agent_id, interest_map, responsesIn
         
     return quit
 
-class AgentThreadedBase(Thread):
-    """
-    Base class for Agent running in a 'thread' 
-    """
-    
-    LOW_PRIORITY_BURST_SIZE=5
-    
-    HP_LOGGING = ["c", "e"]
-    LOG_CREDITS={"d": 1, "i":10, "w": 2, "e": 2, "c":1}
+
+class AgentBase(object):
     
     def __init__(self, debug=False):
-        Thread.__init__(self)
-        self.mmap={}
-        
         self.debug=debug
+                
+        self.mmap={}
         self.id = uuid.uuid1()
         self.iq = Queue()
         self.isq= Queue()
-        
         self.agent_name=str(self.__class__).split(".")[-1][:-2]
         self.responsesInterest=[]
-        self.credits={}
-        self.logstats={}
-        self.halting=False
-        self.quit=False
         
+        self.halting=False
+        self.quit=False        
+
     def dprint(self, msg):
         """ Simple debugging facility
         """
@@ -222,36 +212,7 @@ class AgentThreadedBase(Thread):
         self.halting=True
         self._pub("__agent__", self.agent_name, self.id, "halted")
         print "* Agent(%s) (%s) HALTED" % (self.agent_name, self.id)
-        
-    def h_logcredits(self, credits):
-        """ Reception of logging credits
-        
-            ** Don't add credits to existing ones **
-        """
-        try:    self.credits.update(credits)
-        except: pass
-        self._pub("__logstats__", self.agent_name, self.id, self.logstats)
-        
-    def log(self, logLevel, *pargs):
-        """ Logging Facility
-            
-            Throttles messages at the source
-            
-            For starters, every logLevel gets 1 credit 
-        """
-        if self.credits.get(logLevel, 1) == 0:
-            self.logstats[logLevel] = self.logstats.get(logLevel, 0)+1
-            return
-    
-        if logLevel in self.HP_LOGGING:
-            self._pub("__log__", logLevel, *pargs)
-        else:
-            self._pub("log", logLevel, *pargs)
-            
-        if logLevel != "d" and logLevel != "D":
-            start_credits=self.LOG_CREDITS.get(logLevel, 1)
-            self.credits[logLevel]=self.credits.get(logLevel, start_credits)-1
-        
+
     def beforeRun(self):
         """
         Executed before starting the agent's thread
@@ -271,7 +232,55 @@ class AgentThreadedBase(Thread):
         """ Called during each loop iteration
         """
         pass
+
+class AgentPumped(AgentBase):
+    """ An Agent which requires pumping 
+        through an external event on "doPump"
+    """ 
+    def __init__(self, debug=False):
+        AgentBase.__init__(self, debug)
+
+        mswitch.subscribe(self.id, self.iq, self.isq)
+        print "Agent(%s) (%s) starting" % (self.agent_name, self.id)
+
+
+    def doPump(self):
+        if self.quit:
+            return
+            
+        try:
+            self.quit=process_queues(self.halting, self, self.agent_name, self.id, 
+                                self.mmap, self.responsesInterest,
+                                self.iq, self.isq, message_processor)
+        except KeyboardInterrupt:
+            self.quit=True
+            self.pub("__quit__")
+            
+        if not self.quit:
+            self.onLoop()
+
+        if self.quit:        
+            self.beforeQuit()
+            print "Agent(%s) (%s) ending" % (self.agent_name, self.id)
         
+
+
+class AgentThreadedBase(Thread, AgentBase):
+    """
+    Base class for Agent running in a 'thread' 
+    """
+    
+    LOW_PRIORITY_BURST_SIZE=5
+    
+    HP_LOGGING = ["c", "e"]
+    LOG_CREDITS={"d": 1, "i":10, "w": 2, "e": 2, "c":1}
+    
+    def __init__(self, debug=False):
+        Thread.__init__(self)
+        AgentBase.__init__(self, debug)
+        
+        self.debug=debug
+                        
     def run(self):
         """
         Main Loop
@@ -289,9 +298,13 @@ class AgentThreadedBase(Thread):
         
         quit=False
         while not self.quit and not quit:
-            quit=process_queues(self.halting, self, self.agent_name, self.id, 
-                                self.mmap, self.responsesInterest,
-                                self.iq, self.isq, message_processor)
+            try:
+                quit=process_queues(self.halting, self, self.agent_name, self.id, 
+                                    self.mmap, self.responsesInterest,
+                                    self.iq, self.isq, message_processor)
+            except KeyboardInterrupt:
+                quit=True
+                self.pub("__quit__")
             if not quit:
                 self.onLoop()
         

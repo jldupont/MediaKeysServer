@@ -68,7 +68,7 @@ class Clock(object):
                     if tick_day:
                         self.day_count += 1
         
-        #print "tick! ", tick_second
+        print "tick! ", tick_second
         mswitch.publish("__main__", "__tick__", self.ticks_second, 
                         tick_second, tick_min, tick_hour, tick_day, 
                         self.sec_count, self.min_count, self.hour_count, self.day_count)

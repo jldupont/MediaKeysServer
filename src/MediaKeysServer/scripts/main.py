@@ -41,6 +41,7 @@ def main(debug=False):
             _na=NotifierAgent(APP_NAME, ICON_NAME)
             _na.start()
             
+        #import MediaKeysServer.agents.uitk #@UnusedImport
                    
         icon_path=get_res_path(ICON_NAME)
         

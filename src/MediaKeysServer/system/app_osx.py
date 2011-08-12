@@ -46,13 +46,13 @@ class App(NSApplication, BaseApp): #@UndefinedVariable
     def help(self):
         webbrowser.open(self.help_url)
 
-class Ticker(NSObject):
+class Ticker(NSObject): #@UndefinedVariable
     
     def setup(self, time_base, clock_obj):
         self.clock_obj=clock_obj
         self.time_base=time_base
     
-    @objc.signature("v@:@")
+    @objc.signature("v@:@")  #@UndefinedVariable
     def tick_(self, timer):
         print "tick: %s" % timer
         self.clock_obj.tick()
