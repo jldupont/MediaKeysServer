@@ -48,10 +48,10 @@ class App(NSApplication, BaseApp): #@UndefinedVariable
 
 class Ticker(NSObject):
     
-    @objc.signature("v@:")
-    def tick_(self):
-        #print "tick: %s" % timer
-        print "Tick!"
+    @objc.signature("v@:s")
+    def tick_(self, timer):
+        print "tick: %s" % timer
+        #print "Tick!"
         
 
 def create():
