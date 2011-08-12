@@ -58,9 +58,9 @@ class Ticker(NSObject): #@UndefinedVariable
     
     @objc.signature("v@:@")  #@UndefinedVariable
     def tick_(self, timer):
-        print "tick: %s" % timer
         self.clock_obj.tick()
-        self.ui_obj.tick()
+        if self.ui_obj is not None:
+            self.ui_obj.tick()
         
 
 def create():
@@ -70,12 +70,8 @@ def create():
 def run(app, time_base, clock_class, ui_class):
     clock_obj=clock_class(time_base)
     
-    print "before create ui"
-    ui_obj=ui_class()
-    print "after create ui"
-    
     ticker=Ticker.alloc().init()
-    ticker.dosetup(time_base, clock_obj, ui_obj)
+    ticker.dosetup(time_base, clock_obj, None)
     
     NSTimer.scheduledTimerWithTimeInterval_target_selector_userInfo_repeats_(time_base/1000, ticker, 'tick:', None, True) #@UndefinedVariable
     AppHelper.runEventLoop(installInterrupt=True)

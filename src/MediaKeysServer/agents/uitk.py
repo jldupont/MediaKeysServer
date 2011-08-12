@@ -3,13 +3,10 @@ Created on 2011-08-12
 
 @author: jldupont
 '''
-from ..system.base import AgentPumped
-from ..system import util
-
-if util.isOSX():
-    import objc #@UnresolvedImport @UnusedImport
-
 import Tkinter
+
+from ..system.base import AgentPumped
+
 
 class UiAgent(AgentPumped):
     
