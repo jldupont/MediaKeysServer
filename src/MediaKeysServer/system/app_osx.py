@@ -16,6 +16,8 @@ from ..system import mswitch as mswitch
 class App(NSApplication, BaseApp): #@UndefinedVariable
 
     def finishLaunching(self):
+        print self.icon_path
+        
         statusbar = NSStatusBar.systemStatusBar()
         self.statusitem = statusbar.statusItemWithLength_(NSSquareStatusItemLength)
 
