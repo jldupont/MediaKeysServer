@@ -19,6 +19,10 @@ class UiAgent(AgentPumped):
         self.button_quit=Tkinter.Button(self.frame, text="Quit", command=self.announceQuit)
         self.button_quit.pack(side=Tkinter.LEFT)
         
+        self.root.protocol("WM_DELETE_WINDOW", self.delete_window)
+        
+    def delete_window(self):
+        self.root.withdraw()
         
     def announceQuit(self):
         self.pub("__quit__")
