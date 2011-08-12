@@ -24,5 +24,5 @@ try:
             print "%s: %s" % (app_name, msg)
     
 except:
-    def notify(app_name, msg, icon_name="important", urgency=pynotify.URGENCY_CRITICAL):
+    def notify(app_name, msg, icon_name="important", urgency=None):
         print "%s: %s" % (app_name, msg)
