@@ -4,6 +4,18 @@ Created on 2011-08-11
 @author: jldupont
 
 http://pyobjc.sourceforge.net/
+
+KeyCode   What
+20        previous
+19        next
+16        play-pause
+7         volume-mute
+1         volume-down
+0         volume-up
+
+keyState  What
+11        key-depressed
+10        key-pressed
 '''
 import webbrowser
 
@@ -14,6 +26,15 @@ from PyObjCTools import AppHelper  #@UnresolvedImport
 
 from app import BaseApp
 from ..system import mswitch as mswitch
+
+TranslationMap={
+                 0: "volume-up"
+                ,1: "volume-down"
+                ,7: "mute"
+                ,16:"play-pause"
+                ,19:"next"
+                ,20:"previous"
+                }
 
 class App(NSApplication, BaseApp): #@UndefinedVariable
 
@@ -46,9 +67,12 @@ class App(NSApplication, BaseApp): #@UndefinedVariable
                     keyCode = (data & 0xFFFF0000) >> 16
                     keyFlags = (data & 0x0000FFFF)
                     keyState = (keyFlags & 0xFF00) >> 8
-                    keyRepeat = keyFlags & 0x1
+                    _keyRepeat = keyFlags & 0x1
         
-                    print "keycode(%s) keystate(%s)" % (keyCode, keyState)
+                    if keyState==11: #depressed
+                        tkey=TranslationMap.get(keyCode, None)
+                        if tkey is not None:
+                            print "keycode(%s) keystate(%s)" % (keyCode, keyState)
         
         NSApplication.sendEvent_(self, event)        
 
