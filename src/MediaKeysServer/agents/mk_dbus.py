@@ -8,7 +8,7 @@
     Created on 2010-10-22
     @author: jldupont
 """
-import dbus.service
+import dbus.service #@UnresolvedImport
     
 from ..system.base import AgentThreadedBase
 from ..system import mswitch

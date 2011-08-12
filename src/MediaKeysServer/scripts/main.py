@@ -32,6 +32,7 @@ def main(debug=False):
     try:
         import MediaKeysServer.system.util as util
         from   MediaKeysServer.agents.clock import Clock
+        import MediaKeysServer.agents.socket_server #@UnusedImport
         from   MediaKeysServer.res import get_res_path
         from   MediaKeysServer.system import app as App
                 
@@ -41,7 +42,7 @@ def main(debug=False):
             _na=NotifierAgent(APP_NAME, ICON_NAME)
             _na.start()
             
-        from MediaKeysServer.agents.uitk import UiAgent
+        #from MediaKeysServer.agents.uitk import UiAgent
                    
         icon_path=get_res_path(ICON_NAME)
         
@@ -53,7 +54,7 @@ def main(debug=False):
         
         mswitch.publish("__main__", "debug", debug)
                 
-        App.run(_app, TIME_BASE, Clock, UiAgent)
+        App.run(_app, TIME_BASE, Clock, None)
         
     except KeyboardInterrupt:
         mswitch.quit()

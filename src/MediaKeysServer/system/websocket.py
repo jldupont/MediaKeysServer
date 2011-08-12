@@ -98,6 +98,7 @@ class WebSocket(object):
         return True
 
     def onmessage(self, data):
+        print "onMessage: %s" % data
         logging.info("Got message: %s" % data)
 
     def send(self, data):
