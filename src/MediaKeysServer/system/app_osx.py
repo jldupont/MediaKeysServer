@@ -44,10 +44,16 @@ class App(NSApplication, BaseApp): #@UndefinedVariable
     def help(self):
         webbrowser.open(self.help_url)
 
+class Ticker(object):
+    def tick(self, timer):
+        print "tick: %s" % timer
+        
 
 def create():
     app = App.sharedApplication()
     return app
     
 def run(app):
-    AppHelper.runEventLoop()
+    ticker=Ticker()
+    NSTimer.timerWithTimeInterval_target_selector_userInfo_repeats(0.1, ticker, 'tick', None, False) #@UndefinedVariable
+    AppHelper.runEventLoop(installInterrupt=True)

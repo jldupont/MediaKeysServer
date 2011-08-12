@@ -61,7 +61,7 @@ class TrayApp(BaseApp):
         #self.tray.connect('activate', self.do_popup_menu_activate)
         self.tray.connect('popup-menu', self.do_popup_menu)
         
-        scaled_buf = AppIcon(self.icon_path, self.icon_file).getIconPixBuf()
+        scaled_buf = AppIcon(self.icon_path).getIconPixBuf()
         self.tray.set_from_pixbuf( scaled_buf )
         
     def do_popup_menu_activate(self, statusIcon):
