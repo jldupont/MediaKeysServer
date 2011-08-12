@@ -38,8 +38,14 @@ def main(debug=False):
         from   MediaKeysServer.agents.notifier import notify, NotifierAgent #@Reimport
                 
         icon_path=get_res_path()
-        _ta=TrayAgent(APP_NAME, icon_path, ICON_NAME, HELP_URL, APP_VERSION)
-
+        from MediaKeysServer.system import app as App
+        
+        _app=App.create()
+        _app.app_name=APP_NAME
+        _app.version=APP_VERSION
+        _app.help_url=HELP_URL
+        _app.icon_path=icon_path
+        
         _na=NotifierAgent(APP_NAME, ICON_NAME)
         _na.start()
 
@@ -48,8 +54,9 @@ def main(debug=False):
         
         mswitch.publish("__main__", "debug", debug)
         
-        import gtk
-        gtk.main() #@UndefinedVariable
+        App.run(_app)
+        #import gtk
+        #gtk.main() #@UndefinedVariable
         
     except KeyboardInterrupt:
         mswitch.quit()
