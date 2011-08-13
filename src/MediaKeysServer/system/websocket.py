@@ -154,18 +154,3 @@ class WebSocketServer(object):
     def send(self, msg):
         for socket in self.connections.values():
             socket.send(msg)
-
-
-if __name__ == "__main__":
-    logging.basicConfig(level=logging.DEBUG, format="%(asctime)s - %(levelname)s - %(message)s")
-    server = WebSocketServer("localhost", 9999, WebSocket)
-    server_thread = Thread(target=server.listen, args=[5])
-    server_thread.start()
-    # Add SIGINT handler for killing the threads
-    def signal_handler(signal, frame):
-        logging.info("Caught Ctrl+C, shutting down...")
-        server.running = False
-        sys.exit()
-    signal.signal(signal.SIGINT, signal_handler)
-    while True:
-        time.sleep(100)

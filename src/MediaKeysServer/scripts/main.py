@@ -49,14 +49,16 @@ def install_and_exit():
         dfile=get_res_path(DESKTOP_FILEPATH)
         shutil.copy(dfile, "/usr/share/applications/%s" % DESKTOP_FILEPATH)
     except Exception,e:
-        print "* Can't copy .desktop file to /usr/share/applications (%s)" % e
+        print "* Can't copy .desktop (%s)" % e
+        print "! Probably needs 'sudo'"
         exit(1)
 
     try:
         dfile=get_res_path(ICON_NAME)
-        shutil.copy(dfile, "/usr/share/applications/%s" % ICON_NAME)
+        shutil.copy(dfile, "/usr/share/icons/%s" % ICON_NAME)
     except Exception,e:
-        print "* Can't copy icon file to /usr/share/icons (%s)" % e
+        print "* Can't copy icon (%s)" % e
+        print "! Probably needs 'sudo'"
         exit(1)
         
     exit(0)
