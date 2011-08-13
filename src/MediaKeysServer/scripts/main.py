@@ -5,7 +5,7 @@ Created on 2011-08-09
 '''   
 import sys
 
-APP_VERSION="0.1"
+APP_VERSION="0.3"
 APP_NAME="MediaKeysServer"
 ICON_NAME="mediakeysserver.png"
 DESKTOP_FILEPATH="mediakeysserver.desktop"
@@ -46,11 +46,21 @@ def install_and_exit(launch_file):
     """
     import os
     import shutil
+    
+    launch_base=os.path.basename(launch_file)
+    dest_launch_file="/usr/local/bin/%s" % launch_base
+    
     try:
-        launch_base=os.path.basename(launch_file)
-        shutil.copy(launch_file, "/usr/local/bin/%s" % launch_base)
+        shutil.copy(launch_file, dest_launch_file)
     except Exception,e:
         print "* Can't copy 'launch' file (%s)" % e
+        print "! Probably needs 'sudo'"
+        exit(1)
+
+    try:
+        os.chmod(dest_launch_file, 0755)
+    except Exception,e:
+        print "* Can't copy 'chmod' launch file (%s)" % e
         print "! Probably needs 'sudo'"
         exit(1)
     
