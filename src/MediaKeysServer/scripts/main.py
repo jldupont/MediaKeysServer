@@ -41,10 +41,19 @@ def exit(code):
     sys.exit(code)
 
 
-def install_and_exit():
+def install_and_exit(launch_file):
     """ Install in Gnome and exit
     """
+    import os
     import shutil
+    try:
+        launch_base=os.path.basename(launch_file)
+        shutil.copy(launch_file, "/usr/local/bin/%s" % launch_base)
+    except Exception,e:
+        print "* Can't copy 'launch' file (%s)" % e
+        print "! Probably needs 'sudo'"
+        exit(1)
+    
     try:
         dfile=get_res_path(DESKTOP_FILEPATH)
         shutil.copy(dfile, "/usr/share/applications/%s" % DESKTOP_FILEPATH)
@@ -54,8 +63,8 @@ def install_and_exit():
         exit(1)
 
     try:
-        dfile=get_res_path(ICON_NAME)
-        shutil.copy(dfile, "/usr/share/icons/%s" % ICON_NAME)
+        ifile=get_res_path(ICON_NAME)
+        shutil.copy(ifile, "/usr/share/icons/%s" % ICON_NAME)
     except Exception,e:
         print "* Can't copy icon (%s)" % e
         print "! Probably needs 'sudo'"
@@ -64,10 +73,10 @@ def install_and_exit():
     exit(0)
 
 
-def main(args, debug=False):
+def main(args, launch_file, debug=False):
     
     if args.i:
-        install_and_exit()
+        install_and_exit(launch_file)
     
     try:
         import MediaKeysServer.system.util as util
