@@ -8,12 +8,19 @@ import sys
 APP_VERSION="0.1"
 APP_NAME="MediaKeysServer"
 ICON_NAME="mediakeysserver.png"
+DESKTOP_FILEPATH="mediakeysserver.desktop"
 HELP_URL="http://www.systemical.com/doc/opensource/mediakeysserver"
 TIME_BASE=500
 
+options=[
+        # name,    action,      default, help
+         ( '-i',  'store_true', False,  "Install in Gnome"),
+         ]
+
+
 ###<<< DEVELOPMENT MODE SWITCHES
-MSWITCH_OBSERVE_MODE=True
-MSWITCH_DEBUGGING_MODE=True
+MSWITCH_OBSERVE_MODE=False
+MSWITCH_DEBUGGING_MODE=False
 MSWITCH_DEBUG_INTEREST=False
 DEV_MODE=True
 ###>>>
@@ -21,6 +28,7 @@ DEV_MODE=True
 import MediaKeysServer.system.setup #@UnusedImport
 from   MediaKeysServer.system import base as base
 from   MediaKeysServer.system import mswitch #@UnusedImport
+from   MediaKeysServer.res import get_res_path
 
 base.debug=DEV_MODE
 base.debug_interest=MSWITCH_DEBUG_INTEREST
@@ -28,12 +36,42 @@ base.debug_interest=MSWITCH_DEBUG_INTEREST
 mswitch.observe_mode=MSWITCH_OBSERVE_MODE
 mswitch.debugging_mode=MSWITCH_DEBUGGING_MODE
 
-def main(debug=False):
+def exit(code):
+    mswitch.quit("__main__")
+    sys.exit(code)
+
+
+def install_and_exit():
+    """ Install in Gnome and exit
+    """
+    import shutil
+    try:
+        dfile=get_res_path(DESKTOP_FILEPATH)
+        shutil.copy(dfile, "/usr/share/applications/%s" % DESKTOP_FILEPATH)
+    except Exception,e:
+        print "* Can't copy .desktop file to /usr/share/applications (%s)" % e
+        exit(1)
+
+    try:
+        dfile=get_res_path(ICON_NAME)
+        shutil.copy(dfile, "/usr/share/applications/%s" % ICON_NAME)
+    except Exception,e:
+        print "* Can't copy icon file to /usr/share/icons (%s)" % e
+        exit(1)
+        
+    exit(0)
+
+
+def main(args, debug=False):
+    
+    if args.i:
+        install_and_exit()
+    
     try:
         import MediaKeysServer.system.util as util
         from   MediaKeysServer.agents.clock import Clock
         import MediaKeysServer.agents.socket_server #@UnusedImport
-        from   MediaKeysServer.res import get_res_path
+        
         from   MediaKeysServer.system import app as App
                 
         if util.isLinux():

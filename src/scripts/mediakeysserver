@@ -15,10 +15,18 @@ if "_DEBUG" in os.environ:
 	lib_path=os.path.abspath(os.path.join(this_dir, ".."))
 	sys.path.insert(0, lib_path)
 
-from MediaKeysServer.scripts.main import main
+from MediaKeysServer.scripts.main import main, options
+
+import argparse
+parser=argparse.ArgumentParser(prog="MediaKeysServer")
+for option in options:
+	name, action, default, help=option
+	parser.add_argument(name, action=action, default=default, help=help)
+	
+args=parser.parse_args()
 
 try:
-	main(DEBUG)
+	main(args, DEBUG)
 except KeyboardInterrupt:
 	print "\nExiting..."
 	sys.exit(1)

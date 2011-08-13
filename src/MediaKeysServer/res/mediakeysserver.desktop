@@ -1,0 +1,7 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=MediaKeys server over WebSocket
+Comment=See http://www.systemical.com/
+Exec=mediakeysserver
+Icon=mediakeysserver
