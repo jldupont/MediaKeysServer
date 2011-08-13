@@ -53,8 +53,8 @@ class App(NSApplication, BaseApp): #@UndefinedVariable
         menuitem = NSMenuItem.alloc().initWithTitle_action_keyEquivalent_('exit', 'terminate:', '')  #@UndefinedVariable
         menu.addItem_(menuitem)
 
-        menuitem = NSMenuItem.alloc().initWithTitle_action_keyEquivalent_('show', 'show', '') #@UndefinedVariable
-        menu.addItem_(menuitem)
+        #menuitem = NSMenuItem.alloc().initWithTitle_action_keyEquivalent_('show', 'show', '') #@UndefinedVariable
+        #menu.addItem_(menuitem)
 
         menuitem = NSMenuItem.alloc().initWithTitle_action_keyEquivalent_('help', 'help', '') #@UndefinedVariable
         menu.addItem_(menuitem)
@@ -62,7 +62,7 @@ class App(NSApplication, BaseApp): #@UndefinedVariable
         self.statusitem.setMenu_(menu)
 
     def sendEvent_(self, event):
-        if event.type() is NSSystemDefined and event.subtype() is 8:
+        if event.type() is NSSystemDefined and event.subtype() is 8:  #@UndefinedVariable
                     data = event.data1()
                     keyCode = (data & 0xFFFF0000) >> 16
                     keyFlags = (data & 0x0000FFFF)
@@ -75,7 +75,7 @@ class App(NSApplication, BaseApp): #@UndefinedVariable
                             mswitch.publish("mk_key_press", tkey, "osx", 0)
                             #print "keycode(%s) keystate(%s): %s" % (keyCode, keyState, tkey)
         
-        NSApplication.sendEvent_(self, event)        
+        NSApplication.sendEvent_(self, event)        #@UndefinedVariable
 
     def show(self):
         mswitch.publish(self, "app_show")

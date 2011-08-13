@@ -13,6 +13,10 @@ class SocketServerAgent(AgentThreadedBase):
 
         self.server= WebSocketServer("localhost", 1337, WebSocket)
         
+    def h_mk_key_press(self, key, *_):
+        msg="""{"mtype": "mk_key_press", "key": "%s"}""" % key
+        self.server.send(msg)
+        
     def onLoop(self):
         self.server.listen(timeout=1)
 

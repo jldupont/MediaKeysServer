@@ -41,7 +41,7 @@ class WebSocket(object):
                 parts = self.header.split('\r\n\r\n', 1)
                 self.header = parts[0]
                 if self.dohandshake(self.header, parts[1]):
-                    logging.info("Handshake successful")
+                    #logging.info("Handshake successful")
                     self.handshaken = True
         else:
             self.data += data
@@ -52,7 +52,7 @@ class WebSocket(object):
                     self.onmessage(msg[1:])
 
     def dohandshake(self, header, key=None):
-        logging.debug("Begin handshake: %s" % header)
+        #logging.debug("Begin handshake: %s" % header)
         digitRe = re.compile(r'[^0-9]')
         spacesRe = re.compile(r'\s')
         part_1 = part_2 = origin = None
@@ -77,7 +77,7 @@ class WebSocket(object):
             elif name.lower() == "origin":
                 origin = value
         if part_1 and part_2:
-            logging.debug("Using challenge + response")
+            #logging.debug("Using challenge + response")
             challenge = struct.pack('!I', part_1) + struct.pack('!I', part_2) + key
             response = hashlib.md5(challenge).digest()
             handshake = WebSocket.handshake % {
@@ -87,13 +87,13 @@ class WebSocket(object):
             }
             handshake += response
         else:
-            logging.warning("Not using challenge + response")
+            #logging.warning("Not using challenge + response")
             handshake = WebSocket.handshake % {
                 'origin': origin,
                 'port': self.server.port,
                 'bind': self.server.bind
             }
-        logging.debug("Sending handshake %s" % handshake)
+        #logging.debug("Sending handshake %s" % handshake)
         self.client.send(handshake)
         return True
 
@@ -103,7 +103,7 @@ class WebSocket(object):
 
     def send(self, data):
         logging.info("Sent message: %s" % data)
-        self.client.send("\x00%s\xff" % data)
+        self.client.send("\x00"+data.encode('utf8')+"\xff")
 
     def close(self):
         self.client.close()
@@ -134,7 +134,7 @@ class WebSocketServer(object):
                 self.connections[fileno] = self.cls(client, self)
             else:
                 logging.debug("Client ready for reading %s" % ready)
-                logging.debug("Connections %s" % `self.connections`)
+                #logging.debug("Connections %s" % `self.connections`)
                 client = self.connections[ready].client
                 data = client.recv(1024)
                 fileno = client.fileno()

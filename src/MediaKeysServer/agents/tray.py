@@ -19,15 +19,15 @@ class AppPopupMenu:
             self.item_version.set_sensitive(False)
             
         self.item_exit = gtk.MenuItem( "exit", True) #@UndefinedVariable
-        self.item_show = gtk.MenuItem( "show", True) #@UndefinedVariable
+        #self.item_show = gtk.MenuItem( "show", True) #@UndefinedVariable
         self.item_help = gtk.MenuItem( "help", True) #@UndefinedVariable
 
-        self.item_show.connect( 'activate', app.show)
+        #self.item_show.connect( 'activate', app.show)
         self.item_help.connect( 'activate', app.help)
         self.item_exit.connect( 'activate', app.exit)
         
         self.menu = gtk.Menu() #@UndefinedVariable
-        self.menu.append( self.item_show)
+        #self.menu.append( self.item_show)
         self.menu.append( self.item_help)
         self.menu.append( self.item_exit)
         if version is not None:
