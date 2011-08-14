@@ -5,7 +5,7 @@ Created on 2011-08-09
 '''   
 import sys
 
-APP_VERSION="0.3"
+APP_VERSION="0.5"
 APP_NAME="MediaKeysServer"
 ICON_NAME="mediakeysserver.png"
 DESKTOP_FILEPATH="mediakeysserver.desktop"
@@ -85,8 +85,11 @@ def install_and_exit(launch_file):
 
 def main(args, launch_file, debug=False):
     
-    if args.i:
-        install_and_exit(launch_file)
+    try:
+        if args.i:
+            install_and_exit(launch_file)
+    except:
+        pass
     
     try:
         import MediaKeysServer.system.util as util

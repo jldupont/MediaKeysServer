@@ -21,7 +21,6 @@ import logging
 from select import select
 import hashlib
 import base64
-import struct
 
 logging.basicConfig(level=logging.DEBUG)
 

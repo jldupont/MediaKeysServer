@@ -17,13 +17,19 @@ if "_DEBUG" in os.environ:
 
 from MediaKeysServer.scripts.main import main, options
 
-import argparse
-parser=argparse.ArgumentParser(prog="MediaKeysServer")
-for option in options:
-	name, action, default, help=option
-	parser.add_argument(name, action=action, default=default, help=help)
+## There is no 'argparse' module
+##  on OSX / Python 2.6
+try:
+	import argparse
+	parser=argparse.ArgumentParser(prog="MediaKeysServer")
+	for option in options:
+		name, action, default, help=option
+		parser.add_argument(name, action=action, default=default, help=help)
+		
+	args=parser.parse_args()
+except:
+	args={}
 	
-args=parser.parse_args()
 
 this_path=os.path.abspath(__file__)
 try:
