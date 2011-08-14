@@ -153,7 +153,8 @@ class WebSocket(object):
 
     def send(self, data):
         logging.info("Sent message: %s" % data)
-        self.client.send("\x00"+data.encode('utf8')+"\xff")
+        #self.client.send("\x00"+data.encode('utf8')+"\xff")
+        self.client.send(self.buildFrame(msg))
 
     def buildFrame(self, msg):
         """
@@ -167,8 +168,25 @@ class WebSocket(object):
         126->65535 :  7bits+16bits
         >65535     :  7bits+64bits
         """
+        FIN=1
+        RSV1=0
+        RSV2=0
+        RSV3=0
+        Opcode3=0
+        Opcode2=0
+        Opcode1=0
+        Opcode0=0
+        _MASK=0 ##always 0...
         payload_len=len(msg)
+        if payload_len < 126:
+            frame=struct.pack("!????????cs",FIN,RSV1,RSV2,RSV3,Opcode3,Opcode2,Opcode1,Opcode0,payload_len,msg)
+        elif payload_len<65536:
+            frame=struct.pack("!????????cHs",FIN,RSV1,RSV2,RSV3,Opcode3,Opcode2,Opcode1,Opcode0,126,payload_len,msg)
+        else:
+            frame=struct.pack("!????????cLs",FIN,RSV1,RSV2,RSV3,Opcode3,Opcode2,Opcode1,Opcode0,127,payload_len,msg)
         
+        return frame
+
 
 class WebSocketServer(object):
     def __init__(self, bind, port, cls, backlog=5):
