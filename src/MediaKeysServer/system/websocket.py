@@ -2,21 +2,34 @@
     Websocket.py
     
     Created on 2011-08-08
+    
+    hybi-10:  sec-websocket-key
+    "For this header, the server has to take the value (as present in the
+   header, e.g. the base64-encoded [RFC4648] version minus any leading
+   and trailing whitespace), and concatenate this with the GUID
+   "258EAFA5-E914-47DA-95CA-C5AB0DC85B11" in string form, which is
+   unlikely to be used by network endpoints that do not understand the
+   WebSocket protocol.  A SHA-1 hash (160 bits), base64-encoded (see
+   Section 4 of [RFC4648]), of this concatenation is then returned in
+   the server's handshake [FIPS.180-2.2002]."
+    
 '''
-import time
 import struct
 import socket
-import hashlib
-import sys
-from select import select
 import re
 import logging
-from threading import Thread
-import signal
+from select import select
+import hashlib
+import base64
+import struct
 
 logging.basicConfig(level=logging.DEBUG)
 
 class WebSocket(object):
+    
+    ## hybi-10
+    GUID="258EAFA5-E914-47DA-95CA-C5AB0DC85B11"
+    
     handshake = (
         "HTTP/1.1 101 Web Socket Protocol Handshake\r\n"
         "Upgrade: WebSocket\r\n"
@@ -27,6 +40,18 @@ class WebSocket(object):
         "Sec-Websocket-Location: ws://%(bind)s:%(port)s/\r\n"
         "\r\n"
     )
+    
+    handshake_10 = (
+        "HTTP/1.1 101 Switching Protocols\r\n"
+        "Upgrade: websocket\r\n"
+        "Connection: Upgrade\r\n"
+        "Sec-WebSocket-Protocol: chat\r\n"
+        "Sec-Websocket-Accept: %(accept)s\r\n"
+        "Sec-Websocket-Origin: %(origin)s\r\n"
+        "Sec-Websocket-Location: ws://%(bind)s:%(port)s/\r\n"
+        "\r\n"
+    )
+    
     def __init__(self, client, server):
         self.client = client
         self.server = server
@@ -44,6 +69,7 @@ class WebSocket(object):
                     #logging.info("Handshake successful")
                     self.handshaken = True
         else:
+            #print "data: %s" % data
             self.data += data
             msgs = self.data.split('\xff')
             self.data = msgs.pop()
@@ -51,24 +77,32 @@ class WebSocket(object):
                 if msg[0] == '\x00':
                     self.onmessage(msg[1:])
 
+    digitRe = re.compile(r'[^0-9]')
+    spacesRe = re.compile(r'\s')
+
     def dohandshake(self, header, key=None):
         #logging.debug("Begin handshake: %s" % header)
-        digitRe = re.compile(r'[^0-9]')
-        spacesRe = re.compile(r'\s')
         part_1 = part_2 = origin = None
+        
+        ## hybi-10
+        part_3 = None
+        
         for line in header.split('\r\n')[1:]:
             name, value = line.split(': ', 1)
+            
+            #print "name(%s) value(%s)" % (name, value)
+            
             if name.lower() == "sec-websocket-key1":
-                key_number_1 = int(digitRe.sub('', value))
-                spaces_1 = len(spacesRe.findall(value))
+                key_number_1 = int(self.digitRe.sub('', value))
+                spaces_1 = len(self.spacesRe.findall(value))
                 if spaces_1 == 0:
                     return False
                 if key_number_1 % spaces_1 != 0:
                     return False
                 part_1 = key_number_1 / spaces_1
             elif name.lower() == "sec-websocket-key2":
-                key_number_2 = int(digitRe.sub('', value))
-                spaces_2 = len(spacesRe.findall(value))
+                key_number_2 = int(self.digitRe.sub('', value))
+                spaces_2 = len(self.spacesRe.findall(value))
                 if spaces_2 == 0:
                     return False
                 if key_number_2 % spaces_2 != 0:
@@ -76,6 +110,12 @@ class WebSocket(object):
                 part_2 = key_number_2 / spaces_2
             elif name.lower() == "origin":
                 origin = value
+            elif name.lower() == "sec-websocket-key":
+                part_3=value.rstrip().lstrip()
+                part_3=part_3+self.GUID
+                part_3=hashlib.sha1(part_3)
+                part_3=base64.b64encode(part_3.digest())                
+                
         if part_1 and part_2:
             #logging.debug("Using challenge + response")
             challenge = struct.pack('!I', part_1) + struct.pack('!I', part_2) + key
@@ -86,6 +126,13 @@ class WebSocket(object):
                 'bind': self.server.bind
             }
             handshake += response
+        elif part_3:
+            handshake = WebSocket.handshake_10 % {
+                'origin': origin,
+                'port': self.server.port,
+                'bind': self.server.bind,
+                'accept':  part_3
+            }            
         else:
             #logging.warning("Not using challenge + response")
             handshake = WebSocket.handshake % {
@@ -101,12 +148,27 @@ class WebSocket(object):
         print "onMessage: %s" % data
         logging.info("Got message: %s" % data)
 
+    def close(self):
+        self.client.close()
+
     def send(self, data):
         logging.info("Sent message: %s" % data)
         self.client.send("\x00"+data.encode('utf8')+"\xff")
 
-    def close(self):
-        self.client.close()
+    def buildFrame(self, msg):
+        """
+        According to http://tools.ietf.org/html/draft-ietf-hybi-thewebsocketprotocol-10
+        FIN=1
+        Opcode=1
+        Mask=0
+        
+        payload length encoding:
+        0  ->125   :  7bits
+        126->65535 :  7bits+16bits
+        >65535     :  7bits+64bits
+        """
+        payload_len=len(msg)
+        
 
 class WebSocketServer(object):
     def __init__(self, bind, port, cls, backlog=5):
