@@ -145,7 +145,7 @@ class WebSocket(object):
 
     def onmessage(self, data):
         print "onMessage: %s" % data
-        logging.info("Got message: %s" % data)
+        #logging.info("Got message: %s" % data)
 
     def close(self):
         self.client.close()
@@ -154,7 +154,7 @@ class WebSocket(object):
         logging.info("Sent message: %s" % data)
         #self.client.send("\x00"+data.encode('utf8')+"\xff")
         frame=self.buildFrame(data.encode('utf8'))
-        logging.info("Sent frame: %s" % frame)
+        #logging.info("Sent frame: %s" % frame)
         self.client.send(frame)
 
     def buildFrame(self, msg):
