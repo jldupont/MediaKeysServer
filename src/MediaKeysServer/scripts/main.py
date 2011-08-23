@@ -5,7 +5,7 @@ Created on 2011-08-09
 '''   
 import sys
 
-APP_VERSION="0.5"
+APP_VERSION="0.6"
 APP_NAME="MediaKeysServer"
 ICON_NAME="mediakeysserver.png"
 DESKTOP_FILEPATH="mediakeysserver.desktop"
@@ -20,7 +20,7 @@ options=[
 
 ###<<< DEVELOPMENT MODE SWITCHES
 MSWITCH_OBSERVE_MODE=False
-MSWITCH_DEBUGGING_MODE=False
+MSWITCH_DEBUGGING_MODE=True
 MSWITCH_DEBUG_INTEREST=False
 DEV_MODE=True
 ###>>>

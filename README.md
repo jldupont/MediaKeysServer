@@ -9,3 +9,8 @@ Version of the [Web-Socket protocol](http://tools.ietf.org/html/draft-ietf-hybi-
 The easiest way is through [Pypi](http://pypi.python.org/pypi?:action=display&name=mediakeysserver):
 
 `sudo easy_install mediakeysserver`
+
+History
+=======
+
+0.6 : fixed OSX version issue

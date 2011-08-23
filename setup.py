@@ -6,7 +6,7 @@ Created on 2011-05-05
 '''
 
 __author__  ="Jean-Lou Dupont"
-__version__ ="0.5"
+__version__ ="0.6"
 
 from distutils.core import setup
 from setuptools import find_packages
