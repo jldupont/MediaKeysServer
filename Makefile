@@ -11,7 +11,7 @@ all:
 	@echo " osx : release for OSX"
 	
 osx:
-	@rm -rf build
+	@rm -Rf build
 	@install -d build/osx/MediaKeysServer.app/Contents
 	@install -d build/osx/MediaKeysServer.app/Contents/MacOs
 	@install -d build/osx/MediaKeysServer.app/Contents/Resources
@@ -22,6 +22,7 @@ osx:
 	@install -d build/osx/MediaKeysServer.app/Contents/Resources/MediaKeysServer/system
 	
 	@install Info.plist          build/osx/MediaKeysServer.app/Contents
+	@install src/MediaKeysServer/res/mediakeysserver.icns   build/osx/MediaKeysServer.app/Contents/Resources
 	
 	@cp src/scripts/mediakeysserver      build/osx/MediaKeysServer.app/Contents/MacOs/mks
 	
