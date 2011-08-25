@@ -16,15 +16,18 @@ osx:
 	@install -d build/osx/MediaKeysServer.app/Contents/MacOs
 	@install -d build/osx/MediaKeysServer.app/Contents/Resources
 	
+	@install -d build/osx/MediaKeysServer.app/Contents/Resources/MediaKeysServer/agents
+	@install -d build/osx/MediaKeysServer.app/Contents/Resources/MediaKeysServer/res
+	@install -d build/osx/MediaKeysServer.app/Contents/Resources/MediaKeysServer/scripts
+	@install -d build/osx/MediaKeysServer.app/Contents/Resources/MediaKeysServer/system
+	
 	@install Info.plist          build/osx/MediaKeysServer.app/Contents
 	
-	@install server/keysocket.py build/osx/MediaKeysServer.app/Contents/MacOs
-	@install server/websocket.py build/osx/MediaKeysServer.app/Contents/MacOs
-	@install server/app.py       build/osx/MediaKeysServer.app/Contents/MacOs
-
-	@install server/icon.icns   build/osx/MediaKeysServer.app/Contents/Resources
-	@install server/icon.png    build/osx/MediaKeysServer.app/Contents/Resources
-	@install server/icon-hi.png build/osx/MediaKeysServer.app/Contents/Resources
+	@cp src/scripts/mediakeysserver      build/osx/MediaKeysServer.app/Contents/MacOs/mks
+	
+	@cp -R src/MediaKeysServer build/osx/MediaKeysServer.app/Contents/MacOs
+	@rm -Rf build/osx/MediaKeysServer.app/*.pyc
+	
 	
 	@echo "Finished building OSX .app"
 	
